@@ -1,3 +1,20 @@
+```
+docker pull registry.cn-hangzhou.aliyuncs.com/server_repertory/mysql:latest
+```
+|软件|版本|
+|:---|:---|
+|mariadb|10.2.15|
+
+
+#### 启动命令示例
+
+```
+docker run -dit -p 3306:3306 -v /data/mysql/data/:/data/mariadb/database/ -v /data/mysql/logs/:/data/mariadb/logs/ mysql
+```
+
+### 启动之后，虽然将容器内的3306端口映射到了宿主机，但是仍然无法使用mysql -h 127.0.0.1 -p3306 -u root连接容器mysql的，
+### 但是/data/mysql/data这个数据目录内有一个mysql.sock可以通过mysql -S /data/mysql/data/mysql.sock连接到mysql进行配置
+
 ### 数据目录：/data/mariadb/database/
 ### 日志目录：/data/mariadb/logs/
 ### 默认配置文件：/etc/mysql/my.cnf
@@ -6,7 +23,7 @@
 
 ### 已开放3306端口
 
-**附上一个别人写的测试脚本，需要稍作修改才能用**
+**附上一个别人写的测试脚本，需要稍作修改才能用(!!!停用脚本)**
 ```
 #!/bin/sh
 #Test docker image

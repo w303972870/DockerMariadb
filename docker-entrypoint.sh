@@ -1,5 +1,5 @@
 #!/bin/sh
-
+mysql_install_db
 set -eo pipefail
 # set -x
 
