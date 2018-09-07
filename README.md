@@ -9,7 +9,7 @@ docker pull w303972870/mariadb
 #### 启动命令示例
 
 ```
-docker run -dit -p 3306:3306 -v /data/mysql/data/:/data/mariadb/database/ -v /data/mysql/logs/:/data/mariadb/logs/ mysql
+docker run -dit -p 3306:3306 -v /data/mysql/data/:/data/mariadb/database/ -v /data/mysql/logs/:/data/mariadb/logs/ docker.io/w303972870/mariadb
 ```
 
 ### 启动之后，虽然将容器内的3306端口映射到了宿主机，但是仍然无法使用mysql -h 127.0.0.1 -p3306 -u root连接容器mysql的，
