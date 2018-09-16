@@ -13,9 +13,10 @@ ADD my.cnf /root/
 
 
 RUN mkdir /data/mariadb/docker-entrypoint-initdb.d && \
-    apk -U upgrade && apk add mariadb && \
-    apk add --no-cache --virtual .build-deps tzdata linux-headers bison libexecinfo-dev && \
-    apk del .build-deps tzdata linux-headers bison libexecinfo-dev && \
+    apk -U upgrade && apk add mariadb tzdata && \
+    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo "Asia/Shanghai" > /etc/timezone && \
+    apk add --no-cache --virtual .build-deps  linux-headers bison libexecinfo-dev && \
+    apk del .build-deps linux-headers bison libexecinfo-dev && \
     rm -rf /var/cache/apk/* && sed -i "s|socket =.*|socket = ${DATA_DIR}/mysql.sock|" /root/my.cnf \
         && sed -i "s|log_error =.*|log_error = ${LOGS_DIR}/mysql-error.log|" /root/my.cnf \
         && sed -i "s|slow_query_log_file =.*|slow_query_log_file = ${LOGS_DIR}/mysql-slow.log|" /root/my.cnf \
