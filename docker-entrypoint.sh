@@ -1,5 +1,5 @@
 #!/bin/sh
-mysql_install_db
+mysql_install_db --defaults-file=/data/etc/my.cnf --datadir=/data/database/
 set -eo pipefail
 # set -x
 
