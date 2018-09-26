@@ -16,8 +16,8 @@ RUN mkdir -p /data/docker-entrypoint-initdb.d ${DATA_DIR} ${LOGS_DIR} ${ETC_DIR}
     apk -U upgrade && apk add mariadb tzdata && \
     cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo "Asia/Shanghai" > /etc/timezone && \
     apk add --no-cache --virtual .build-deps  linux-headers bison libexecinfo-dev && \
-    apk del .build-deps linux-headers bison libexecinfo-dev && \
-    rm -rf /var/cache/apk/* && sed -i "s|socket =.*|socket = ${DATA_DIR}/mysql.sock|" /root/my.cnf \
+    apk del .build-deps linux-headers bison libexecinfo-dev 
+RUN     rm -rf /var/cache/apk/* && sed -i "s|socket =.*|socket = ${DATA_DIR}/mysql.sock|" /root/my.cnf \
         && sed -i "s|log_error =.*|log_error = ${LOGS_DIR}/mysql-error.log|" /root/my.cnf \
         && sed -i "s|slow_query_log_file =.*|slow_query_log_file = ${LOGS_DIR}/mysql-slow.log|" /root/my.cnf \
         && sed -i "s|general_log_file =.*|general_log_file = ${LOGS_DIR}/general.log|" /root/my.cnf \
