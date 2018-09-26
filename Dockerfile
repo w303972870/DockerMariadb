@@ -29,12 +29,10 @@ RUN mkdir -p /data/docker-entrypoint-initdb.d ${DATA_DIR} ${LOGS_DIR} ${ETC_DIR}
 
 ADD ha_sphinx.so /usr/lib/mariadb/plugin/
 
-VOLUME  ["$DATA_DIR", "$LOGS_DIR"]
-
 COPY docker-entrypoint.sh /usr/local/bin/ 
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 EXPOSE 3306
 
-CMD ["mysqld_safe" ,  "--defaults-file=${ETC_DIR}/my.cnf"]
+CMD ["mysqld_safe" ,  "--defaults-file=/data/etc/my.cnf"]
