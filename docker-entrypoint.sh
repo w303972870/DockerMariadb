@@ -49,18 +49,18 @@ DATA_DIR="$(_get_config 'datadir')"
 if [ ! -d "$DATA_DIR/mysql" ]; then
   file_env 'MYSQL_ROOT_PASSWORD'
   if [ -z "$MYSQL_ROOT_PASSWORD" -a -z "$MYSQL_ALLOW_EMPTY_PASSWORD" -a -z "$MYSQL_RANDOM_ROOT_PASSWORD" ]; then
-    echo >&2 'error: database is uninitialized and password option is not specified '
-    echo >&2 '  You need to specify one of MYSQL_ROOT_PASSWORD, MYSQL_ALLOW_EMPTY_PASSWORD and MYSQL_RANDOM_ROOT_PASSWORD'
+    echo >&2 '错误：数据库未初始化，密码选项未指定 '
+    echo >&2 '  你需要指定一个 MYSQL_ROOT_PASSWORD, MYSQL_ALLOW_EMPTY_PASSWORD and MYSQL_RANDOM_ROOT_PASSWORD'
     exit 1
   fi
 
   mkdir -p "$DATA_DIR"
   chown mysql: "$DATA_DIR"
 
-  echo 'Initializing database'
-  mysql_install_db --user=mysql --defaults-file=/data/etc/my.cnf --datadir="$DATA_DIR" --rpm
+  echo '初始化数据库中'
+  mysql_install_db --user=mysql --datadir="$DATA_DIR" --rpm
   chown -R mysql: "$DATA_DIR"
-  echo 'Database initialized'
+  echo '数据库初始化完成'
 
   # Start mysqld to config it
   mysqld_safe --skip-networking --nowatch
@@ -82,11 +82,11 @@ if [ ! -d "$DATA_DIR/mysql" ]; then
     if execute 'SELECT 1' &> /dev/null; then
       break
     fi
-    echo 'MySQL init process in progress...'
+    echo 'MySQL初始化进程中...'
     sleep 1
   done
   if [ "$i" = 0 ]; then
-    echo >&2 'MySQL init process failed.'
+    echo >&2 'MySQL初始化进程失败.'
     exit 1
   fi
 
@@ -99,7 +99,7 @@ if [ ! -d "$DATA_DIR/mysql" ]; then
 
   if [ -n "$MYSQL_RANDOM_ROOT_PASSWORD" ]; then
     export MYSQL_ROOT_PASSWORD="$(tr -dc _A-Z-a-z-0-9 < /dev/urandom | head -c10)"
-    echo "GENERATED ROOT PASSWORD: $MYSQL_ROOT_PASSWORD"
+    echo "生成root密码: $MYSQL_ROOT_PASSWORD"
   fi
 
   # Create root user, set root password, drop useless table
@@ -164,7 +164,7 @@ SQL
   done
 
   if ! mysqladmin -uroot --password="$MYSQL_PWD" shutdown; then
-    echo >&2 'Shutdown failed'
+    echo >&2 '停止失败'
     exit 1
   fi
 
