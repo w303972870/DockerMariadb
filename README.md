@@ -33,6 +33,20 @@ docker run -dit -p 3306:3306 -v /data/mariadb/:/data/ docker.io/w303972870/maria
 └── logs
 ```
 
+### docker-entrypoint-initdb.d目录内可以放置.sh,.sql,.sq.gz三类文件，作用可以看docker-entrypoint.sh
+```
+  for f in /data/docker-entrypoint-initdb.d/*; do
+    case "$f" in
+      *.sh)     echo "$0: running $f"; . "$f" ;;
+      *.sql)    echo "$0: running $f"; execute < "$f"; echo ;;
+      *.sql.gz) echo "$0: running $f"; gunzip -c "$f" | execute; echo ;;
+      *)        echo "$0: ignoring $f" ;;
+    esac
+    echo
+  done
+```
+
+
 **附上一个简单的my.cnf配置文件**
 
 ```
