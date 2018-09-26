@@ -58,7 +58,7 @@ if [ ! -d "$DATA_DIR/mysql" ]; then
   chown mysql: "$DATA_DIR"
 
   echo 'Initializing database'
-  mysql_install_db --user=mysql --datadir="$DATA_DIR" --rpm
+  mysql_install_db --user=mysql --defaults-file=/data/etc/my.cnf --datadir="$DATA_DIR" --rpm
   chown -R mysql: "$DATA_DIR"
   echo 'Database initialized'
 
