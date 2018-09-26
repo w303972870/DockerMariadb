@@ -9,19 +9,132 @@ docker pull w303972870/mariadb
 #### 启动命令示例
 
 ```
-docker run -dit -p 3306:3306 -v /data/mysql/data/:/data/mariadb/database/ -v /data/mysql/logs/:/data/mariadb/logs/ docker.io/w303972870/mariadb
+docker run -dit -p 3306:3306 -v /data/mariadb/:/data/ docker.io/w303972870/mariadb
 ```
 
 ### 启动之后，虽然将容器内的3306端口映射到了宿主机，但是仍然无法使用mysql -h 127.0.0.1 -p3306 -u root连接容器mysql的，
-### 但是/data/mysql/data这个数据目录内有一个mysql.sock可以通过mysql -S /data/mysql/data/mysql.sock连接到mysql进行配置
+### 但是/data/database/这个数据目录内有一个mysql.sock可以通过[mysql -S /data/mysql/data/mysql.sock]连接到mysql进行配置
 
-### 数据目录：/data/mariadb/database/
-### 日志目录：/data/mariadb/logs/
-### 默认配置文件：/etc/mysql/my.cnf
+### 数据目录：/data/database/
+### 日志目录：/data/logs/
+### 默认配置文件：/data/etc/my.cnf
 
 默认配置文件已开启sphinx引擎，如果没有开启可通过命令： INSTALL PLUGIN sphinx SONAME 'ha_sphinx.so'; 安装，使用命令show engines;查看
 
 ### 已开放3306端口
+
+### 我的/data/mariadb/目录结构
+```
+/data/mariadb/
+├── database
+├── docker-entrypoint-initdb.d
+├── etc
+│   └── my.cnf
+└── logs
+```
+
+**附上一个简单的my.cnf配置文件**
+
+```
+[client]
+port = 3306
+socket = /tmp/mysql.sock
+default-character-set = utf8mb4
+ 
+[mysqld]
+port = 3306
+socket = /tmp/mysql.sock
+datadir = /data/mariadb/database/
+pid-file = /data/mariadb/database/mysql.pid
+user = mysql
+bind-address = 0.0.0.0
+server-id = 1
+ 
+init-connect = 'SET NAMES utf8mb4'
+character-set-server = utf8mb4
+ 
+skip-name-resolve
+#skip-networking
+back_log = 300
+ 
+max_connections = 1000
+max_connect_errors = 6000
+open_files_limit = 65535
+table_open_cache = 1024
+max_allowed_packet = 4M
+binlog_cache_size = 1M
+max_heap_table_size = 8M
+tmp_table_size = 128M
+ 
+read_buffer_size = 2M
+read_rnd_buffer_size = 8M
+sort_buffer_size = 8M
+join_buffer_size = 8M
+key_buffer_size = 256M
+ 
+thread_cache_size = 64
+ 
+query_cache_type = 1
+query_cache_size = 64M
+query_cache_limit = 2M
+ 
+ft_min_word_len = 4
+ 
+log_bin = mysql-bin
+binlog_format = ROW
+expire_logs_days = 30
+ 
+log_error = /data/mariadb/mysql-error.log
+slow_query_log = 1
+long_query_time = 1
+slow_query_log_file = /data/mariadb/mysql-slow.log
+general_log = ON
+log_output = FILE
+general_log_file =  /data/mariadb/general.log
+ 
+performance_schema = 0
+ 
+#lower_case_table_names = 1
+ 
+skip-external-locking
+ 
+default_storage_engine = InnoDB
+#default-storage-engine = MyISAM
+innodb_file_per_table = 1
+innodb_open_files = 500
+innodb_buffer_pool_size = 1024M
+innodb_write_io_threads = 4
+innodb_read_io_threads = 4
+innodb_thread_concurrency = 0
+innodb_purge_threads = 1
+innodb_flush_log_at_trx_commit = 2
+innodb_log_buffer_size = 2M
+innodb_log_file_size = 32M
+innodb_log_files_in_group = 3
+innodb_max_dirty_pages_pct = 90
+innodb_lock_wait_timeout = 120
+ 
+bulk_insert_buffer_size = 8M
+myisam_sort_buffer_size = 64M
+myisam_max_sort_file_size = 10G
+myisam_repair_threads = 1
+ 
+interactive_timeout = 28800
+wait_timeout = 28800
+ 
+[mysqldump]
+quick
+max_allowed_packet = 16M
+ 
+[myisamchk]
+key_buffer_size = 256M
+sort_buffer_size = 8M
+read_buffer = 4M
+write_buffer = 4M
+```
+
+
+
 
 **附上一个别人写的测试脚本，需要稍作修改才能用(!!!停用脚本)**
 ```
