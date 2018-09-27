@@ -24,14 +24,14 @@ if [ ! -d "$DATA_DIR/mysql" ]; then
 
   echo '初始化数据库中'
 
-  /usr/bin/mysql_install_db --user=mysql --datadir="$DATA_DIR" --skip-name-resolve --force --basedir=/usr/bin --rpm
+  /usr/bin/mysql_install_db --user=mysql --datadir="$DATA_DIR" --skip-name-resolve --force --basedir=/usr/ --rpm
 
   chown -R mysql: "$DATA_DIR"
   echo '数据库初始化完成'
 
   # Start mysqld to config it
   echo '执行mysqld_safe --defaults-file=/data/etc/my.cnf'
-  /usr/bin/mysqld_safe --defaults-file=/data/etc/my.cnf
+  /usr/bin/mysqld_safe --defaults-file=/data/etc/my.cnf --user=mysql --datadir="$DATA_DIR" --skip-name-resolve --force --basedir=/usr/
   echo '执行成功'
 
   mysql_options='--protocol=socket -uroot'
