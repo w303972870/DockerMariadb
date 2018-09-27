@@ -7,7 +7,7 @@ _get_config() {
 }
 
 DATA_DIR="$(_get_config 'datadir')"
-
+echo "DATA_DIR："$DATA_DIR
 if [ ! -d "$DATA_DIR/mysql" ]; then
   if [ -z "$MYSQL_ROOT_PASSWORD" -a -z "$MYSQL_ALLOW_EMPTY_PASSWORD" -a -z "$MYSQL_RANDOM_ROOT_PASSWORD" ]; then
     echo >&2 '错误：数据库未初始化，密码选项未指定 '
@@ -18,13 +18,13 @@ if [ ! -d "$DATA_DIR/mysql" ]; then
   mkdir -p "$DATA_DIR"
   chown mysql: "$DATA_DIR"
 
-  echo '初始化数据库中("$DATA_DIR)'
-  /usr/bin/mysql_install_db --user=mysql --datadir="$DATA_DIR" --skip-name-resolve --force --basedir=/usr/ --rpm
+  echo "初始化数据库中($DATA_DIR)"
+  /usr/bin/mysql_install_db --user=mysql --datadir="$DATA_DIR" --skip-name-resolve --force --basedir=/usr/ --rpm > /data/logs/mysql_install_db.log
   chown -R mysql: "$DATA_DIR"
   echo '数据库初始化完成'
 
   # Start mysqld to config it
-  echo '执行/usr/bin/mysqld_safe --defaults-file=/data/etc/my.cnf --user=mysql --datadir="$DATA_DIR" --skip-name-resolve --force --basedir=/usr/'
+  echo "执行/usr/bin/mysqld_safe --defaults-file=/data/etc/my.cnf --user=mysql --datadir=\"$DATA_DIR\" --skip-name-resolve --force --basedir=/usr/"
   /usr/bin/mysqld_safe --defaults-file=/data/etc/my.cnf --user=mysql --datadir="$DATA_DIR" --skip-name-resolve --force --basedir=/usr/
   echo '执行成功'
 

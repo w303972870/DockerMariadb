@@ -13,7 +13,7 @@ ADD my.cnf /root/
 
 
 RUN mkdir -p /data/docker-entrypoint-initdb.d ${DATA_DIR} ${LOGS_DIR} ${ETC_DIR} \ 
-    && apk -U upgrade && apk add mariadb tzdata \ 
+    && apk -U upgrade && apk add mariadb mariadb-client tzdata \ 
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo "Asia/Shanghai" > /etc/timezone \
     && apk add --no-cache --virtual .build-deps  linux-headers bison libexecinfo-dev \ 
     && apk del .build-deps linux-headers bison libexecinfo-dev \ 
