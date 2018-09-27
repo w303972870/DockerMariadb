@@ -22,6 +22,7 @@ RUN mkdir -p /data/docker-entrypoint-initdb.d ${DATA_DIR} ${LOGS_DIR} ${ETC_DIR}
     && sed -i "s|slow_query_log_file =.*|slow_query_log_file = ${LOGS_DIR}/mysql-slow.log|" /root/my.cnf \
     && sed -i "s|general_log_file =.*|general_log_file = ${LOGS_DIR}/general.log|" /root/my.cnf \
     && sed -i "s|datadir =.*|datadir = ${DATA_DIR}\nplugin-load="sphinx=ha_sphinx.so"\n|" /root/my.cnf \
+    && sed -i "s|basedir=.*|basedir=/usr/\n|" /root/my.cnf \
     && sed -i "s|pid-file =.*|pid-file = ${DATA_DIR}/mysql.pid|" /root/my.cnf \
     && \cp /root/my.cnf /data/etc/my.cnf && \cp /root/my.cnf /etc/mysql/my.cnf \
     && echo -e '\n!includedir /data/etc/conf.d/' >> /data/etc/my.cnf && mkdir -p /data/etc/conf.d/ \
