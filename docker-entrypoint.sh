@@ -68,29 +68,6 @@ if [ ! -d "$DATA_DIR/mysql" ]; then
 
   mysql_options='--protocol=socket -uroot'
 
-  # Execute mysql statement
-  # statement can be passed directly or by HEREDOC
-  execute() {
-    statement="$1"
-    if [ -n "$statement" ]; then
-      mysql -ss $mysql_options -e "$statement"
-    else
-      cat /dev/stdin | mysql -ss $mysql_options
-   fi
-  }
-
-  for i in `seq 30 -1 0`; do
-    if execute 'SELECT 1' &> /dev/null; then
-      break
-    fi
-    echo 'MySQL初始化进程中...'
-    sleep 1
-  done
-  if [ "$i" = 0 ]; then
-    echo >&2 'MySQL初始化进程失败.'
-    exit 1
-  fi
-
   if [ -z "$MYSQL_INITDB_SKIP_TZINFO" ]; then
     # sed is for https://bugs.mysql.com/bug.php?id=20545
     mysql_tzinfo_to_sql /usr/share/zoneinfo | \
