@@ -1,6 +1,7 @@
 #!/bin/sh
 chmod 644 /data/etc/my.cnf
-mysql_install_db --defaults-file=/data/etc/my.cnf --skip-name-resolve --datadir=/data/database/
+echo "执行mysql_install_db --defaults-file=/data/etc/my.cnf --skip-name-resolve --datadir=/data/database/ --force"
+mysql_install_db --defaults-file=/data/etc/my.cnf --skip-name-resolve --datadir=/data/database/ --force
 set -eo pipefail
 # set -x
 
