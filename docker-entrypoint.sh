@@ -1,39 +1,5 @@
 #!/bin/sh
 chmod 644 /data/etc/my.cnf
-set -eo pipefail
-# set -x
-
-# if command starts with an option, prepend mysqld
-if [ "${1:0:1}" = '-' ]; then
-  set -- mysqld_safe "$@"
-fi
-
-# usage: file_env VAR [DEFAULT]
-#    ie: file_env 'XYZ_DB_PASSWORD' 'example'
-# (will allow for "$XYZ_DB_PASSWORD_FILE" to fill in the value of
-#  "$XYZ_DB_PASSWORD" from a file, especially for Docker's secrets feature)
-file_env() {
-  var=$1
-  file_var="${var}_FILE"
-  var_value=$(printenv $var || true)
-  file_var_value=$(printenv $file_var || true)
-  default_value=$2
-
-  if [ -n "$var_value" -a -n "$file_var_value" ]; then
-    echo >&2 "error: both $var and $file_var are set (but are exclusive)"
-    exit 1
-  fi
-
-  if [ -z "${var_value}" ]; then
-    if [ -z "${file_var_value}" ]; then
-      export "${var}"="${default_value}"
-    else
-      export "${var}"="${file_var_value}"
-    fi
-  fi
-
-  unset "$file_var"
-}
 
 # Fetch value from server config
 # We use mysqld --verbose --help instead of my_print_defaults because the
