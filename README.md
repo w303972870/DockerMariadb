@@ -6,14 +6,22 @@ docker pull w303972870/mariadb
 |mariadb|10.2.15|
 
 
-#### 启动命令示例
+#### 启动命令示例：为了初始化必须指定一个默认的root密码MYSQL_ROOT_PASSWORD
 
 ```
-docker run -dit -p 3306:3306 -v /data/mariadb/:/data/ docker.io/w303972870/mariadb
+docker run -dit -p 3306:3306 -v /data/mariadb/:/data/ -e MYSQL_ROOT_HOST=192.168.12.% -e MYSQL_ROOT_PASSWORD=123456 docker.io/w303972870/mariadb
 ```
+|变量|解释|
+|:---|:---|
+|MYSQL_ROOT_HOST|'root'@'${MYSQL_ROOT_HOST}' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}|
+|MYSQL_ROOT_PASSWORD|'root'@'${MYSQL_ROOT_HOST}' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}|
+|MYSQL_RANDOM_ROOT_PASSWORD|随机生成一个root密码|
+|MYSQL_INITDB_SKIP_TZINFO|不导入时区信息到MYSQL中|
+|MYSQL_DATABASE|默认创建一个数据库|
+|MYSQL_USER|新建一个用户|
+|MYSQL_PASSWORD|新建用户的密码|
 
-### 启动之后，虽然将容器内的3306端口映射到了宿主机，但是仍然无法使用mysql -h 127.0.0.1 -p3306 -u root连接容器mysql的，
-### 但是/data/database/这个数据目录内有一个mysql.sock可以通过[mysql -S /data/mysql/data/mysql.sock]连接到mysql进行配置
+### 启动之后，需要mysql -h 127.0.0.1 -p3306 -u root连接容器mysql后重新配置访问限制，
 
 ### 数据目录：/data/database/
 ### 日志目录：/data/logs/

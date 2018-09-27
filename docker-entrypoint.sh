@@ -1,4 +1,5 @@
 #!/bin/sh
+chmod 644 /data/etc/my.cnf
 mysql_install_db --defaults-file=/data/etc/my.cnf --datadir=/data/database/
 set -eo pipefail
 # set -x
@@ -99,7 +100,7 @@ if [ ! -d "$DATA_DIR/mysql" ]; then
 
   if [ -n "$MYSQL_RANDOM_ROOT_PASSWORD" ]; then
     export MYSQL_ROOT_PASSWORD="$(tr -dc _A-Z-a-z-0-9 < /dev/urandom | head -c10)"
-    echo "生成root密码: $MYSQL_ROOT_PASSWORD"
+    echo "生成root随机密码: $MYSQL_ROOT_PASSWORD"
   fi
 
   # Create root user, set root password, drop useless table
@@ -164,7 +165,7 @@ SQL
   done
 
   if ! mysqladmin -uroot --password="$MYSQL_PWD" shutdown; then
-    echo >&2 '停止失败'
+    echo >&2 '尝试验证停止失败'
     exit 1
   fi
 
