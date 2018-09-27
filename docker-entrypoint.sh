@@ -64,7 +64,9 @@ if [ ! -d "$DATA_DIR/mysql" ]; then
   echo '数据库初始化完成'
 
   # Start mysqld to config it
-  mysqld_safe --skip-networking --nowatch
+  echo '执行mysqld_safe --defaults-file=/data/etc/my.cnf'
+  mysqld_safe --defaults-file=/data/etc/my.cnf
+  echo '执行成功'
 
   mysql_options='--protocol=socket -uroot'
 
