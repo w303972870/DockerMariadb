@@ -1,9 +1,6 @@
 #!/bin/sh
 chmod 644 /data/etc/my.cnf
 
-# Fetch value from server config
-# We use mysqld --verbose --help instead of my_print_defaults because the
-# latter only show values present in config files, and not server defaults
 _get_config() {
   conf="$1"
    /usr/bin/mysqld --verbose --help --log-bin-index="$(mktemp -u)" 2>/dev/null | awk '$1 == "'"$conf"'" { print $2; exit }'
@@ -11,7 +8,6 @@ _get_config() {
 
 DATA_DIR="$(_get_config 'datadir')"
 
-# Initialize database if necessary
 if [ ! -d "$DATA_DIR/mysql" ]; then
   if [ -z "$MYSQL_ROOT_PASSWORD" -a -z "$MYSQL_ALLOW_EMPTY_PASSWORD" -a -z "$MYSQL_RANDOM_ROOT_PASSWORD" ]; then
     echo >&2 '错误：数据库未初始化，密码选项未指定 '
@@ -22,15 +18,13 @@ if [ ! -d "$DATA_DIR/mysql" ]; then
   mkdir -p "$DATA_DIR"
   chown mysql: "$DATA_DIR"
 
-  echo '初始化数据库中'
-
+  echo '初始化数据库中("$DATA_DIR)'
   /usr/bin/mysql_install_db --user=mysql --datadir="$DATA_DIR" --skip-name-resolve --force --basedir=/usr/ --rpm
-
   chown -R mysql: "$DATA_DIR"
   echo '数据库初始化完成'
 
   # Start mysqld to config it
-  echo '执行mysqld_safe --defaults-file=/data/etc/my.cnf'
+  echo '执行/usr/bin/mysqld_safe --defaults-file=/data/etc/my.cnf --user=mysql --datadir="$DATA_DIR" --skip-name-resolve --force --basedir=/usr/'
   /usr/bin/mysqld_safe --defaults-file=/data/etc/my.cnf --user=mysql --datadir="$DATA_DIR" --skip-name-resolve --force --basedir=/usr/
   echo '执行成功'
 
@@ -111,8 +105,8 @@ SQL
     esac
     echo
   done
-
-  if ! /usr/bin/mysqladmin -uroot --password="$MYSQL_PWD" shutdown; then
+  echo "尝试关闭数据库：/usr/bin/mysqladmin -uroot -p$MYSQL_PWD shutdown"
+  if ! /usr/bin/mysqladmin -uroot -p$MYSQL_PWD shutdown; then
     echo >&2 '尝试验证停止失败'
     exit 1
   fi
