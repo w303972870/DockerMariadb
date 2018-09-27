@@ -9,8 +9,10 @@ docker pull w303972870/mariadb
 #### 启动命令示例：为了初始化必须指定一个默认的root密码MYSQL_ROOT_PASSWORD
 
 ```
-docker run -dit -p 3306:3306 -v /data/mariadb/:/data/ -e MYSQL_ROOT_HOST=192.168.12.% -e MYSQL_ROOT_PASSWORD=123456 docker.io/w303972870/mariadb
+docker run -dit -p 3306:3306 -v /data/mariadb/:/data/ docker.io/w303972870/mariadb
 ```
+
+**以下变量暂停使用**
 |变量|解释|
 |:---|:---|
 |MYSQL_ROOT_HOST|'root'@'${MYSQL_ROOT_HOST}' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}|
@@ -59,31 +61,33 @@ docker run -dit -p 3306:3306 -v /data/mariadb/:/data/ -e MYSQL_ROOT_HOST=192.168
 
 ```
 [client]
-port = 3306
-socket = /tmp/mysql.sock
+port=
+socket = /data/database/mysql.sock
 default-character-set = utf8mb4
  
 [mysqld]
-port = 3306
-socket = /tmp/mysql.sock
-datadir = /data/mariadb/database/
-pid-file = /data/mariadb/database/mysql.pid
+port=
+socket = /data/database/mysql.sock
+tmpdir = /tmp/
+basedir=/usr/
+datadir = /data/database/
+pid-file = /data/database/mysql.pid
 user = mysql
 bind-address = 0.0.0.0
 server-id = 1
  
 init-connect = 'SET NAMES utf8mb4'
 character-set-server = utf8mb4
- 
+federated
 skip-name-resolve
 #skip-networking
 back_log = 300
  
-max_connections = 1000
+max_connections= 16384
 max_connect_errors = 6000
 open_files_limit = 65535
 table_open_cache = 1024
-max_allowed_packet = 4M
+max_allowed_packet= 100M
 binlog_cache_size = 1M
 max_heap_table_size = 8M
 tmp_table_size = 128M
@@ -96,8 +100,8 @@ key_buffer_size = 256M
  
 thread_cache_size = 64
  
-query_cache_type = 1
-query_cache_size = 64M
+query_cache_type=
+query_cache_size=
 query_cache_limit = 2M
  
 ft_min_word_len = 4
@@ -106,13 +110,13 @@ log_bin = mysql-bin
 binlog_format = ROW
 expire_logs_days = 30
  
-log_error = /data/mariadb/mysql-error.log
+log_error = /data/logs/mysql-error.log
 slow_query_log = 1
 long_query_time = 1
-slow_query_log_file = /data/mariadb/mysql-slow.log
-general_log = ON
+slow_query_log_file = /data/logs/mysql-slow.log
+general_log = 1
 log_output = FILE
-general_log_file =  /data/mariadb/general.log
+general_log_file =  /data/logs/general.log
  
 performance_schema = 0
  
@@ -124,18 +128,18 @@ default_storage_engine = InnoDB
 #default-storage-engine = MyISAM
 innodb_file_per_table = 1
 innodb_open_files = 500
-innodb_buffer_pool_size = 1024M
+innodb_buffer_pool_size=
 innodb_write_io_threads = 4
 innodb_read_io_threads = 4
 innodb_thread_concurrency = 0
 innodb_purge_threads = 1
-innodb_flush_log_at_trx_commit = 2
+innodb_flush_log_at_trx_commit=
 innodb_log_buffer_size = 2M
-innodb_log_file_size = 32M
+innodb_log_file_size=
 innodb_log_files_in_group = 3
 innodb_max_dirty_pages_pct = 90
 innodb_lock_wait_timeout = 120
- 
+
 bulk_insert_buffer_size = 8M
 myisam_sort_buffer_size = 64M
 myisam_max_sort_file_size = 10G
@@ -146,7 +150,7 @@ wait_timeout = 28800
  
 [mysqldump]
 quick
-max_allowed_packet = 16M
+max_allowed_packet=
  
 [myisamchk]
 key_buffer_size = 256M
