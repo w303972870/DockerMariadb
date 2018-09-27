@@ -1,6 +1,5 @@
 #!/bin/sh
 chmod 644 /data/etc/my.cnf
-set -eo pipefail
 
 # Fetch value from server config
 # We use mysqld --verbose --help instead of my_print_defaults because the
