@@ -1,7 +1,6 @@
 #!/bin/sh
 chmod 644 /data/etc/my.cnf
 set -eo pipefail
-# set -x
 
 # Fetch value from server config
 # We use mysqld --verbose --help instead of my_print_defaults because the
@@ -12,14 +11,6 @@ _get_config() {
 }
 
 DATA_DIR="$(_get_config 'datadir')"
-execute() {
-    statement="$1"
-    if [ -n "$statement" ]; then
-      /usr/bin/mysql -ss $mysql_options -e "$statement"
-    else
-      cat /dev/stdin |  /usr/bin/mysql -ss $mysql_options
-   fi
-}
 
 # Initialize database if necessary
 if [ ! -d "$DATA_DIR/mysql" ]; then
@@ -55,6 +46,14 @@ if [ ! -d "$DATA_DIR/mysql" ]; then
     export MYSQL_ROOT_PASSWORD="$(tr -dc _A-Z-a-z-0-9 < /dev/urandom | head -c10)"
     echo "生成root随机密码: $MYSQL_ROOT_PASSWORD"
   fi
+    execute() {
+        statement="$1"
+        if [ -n "$statement" ]; then
+          /usr/bin/mysql -ss $mysql_options -e "$statement"
+        else
+          cat /dev/stdin | /usr/bin/mysql -ss $mysql_options
+       fi
+    }
 
   # Create root user, set root password, drop useless table
   # Delete root user except for
