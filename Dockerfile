@@ -35,4 +35,4 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 
 EXPOSE 3306
 
-CMD ["mysqld_safe" ,  "--defaults-file=/data/etc/my.cnf"]
+CMD ["/usr/bin/mysqld_safe" ,  "--defaults-file=/data/etc/my.cnf"]

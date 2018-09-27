@@ -1,7 +1,5 @@
 #!/bin/sh
 chmod 644 /data/etc/my.cnf
-echo "执行mysql_install_db --defaults-file=/data/etc/my.cnf --skip-name-resolve --datadir=/data/database/ --force"
-mysql_install_db  --defaults-file=/data/etc/my.cnf --skip-name-resolve --datadir=/data/database/ --force --basedir=/usr
 set -eo pipefail
 # set -x
 
@@ -60,7 +58,7 @@ if [ ! -d "$DATA_DIR/mysql" ]; then
   chown mysql: "$DATA_DIR"
 
   echo '初始化数据库中'
-  mysql_install_db --user=mysql --datadir="$DATA_DIR" --rpm
+  mysqld --initialize --user=mysql --datadir="$DATA_DIR" --force --basedir=/usr --rpm
   chown -R mysql: "$DATA_DIR"
   echo '数据库初始化完成'
 
@@ -150,7 +148,7 @@ SQL
   fi
 
   echo
-  echo 'MySQL init process done. Ready for start up.'
+  echo '数据库初始化完成，等待启动.'
   echo
 fi
 
