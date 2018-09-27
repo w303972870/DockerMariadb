@@ -23,7 +23,9 @@ if [ ! -d "$DATA_DIR/mysql" ]; then
   chown mysql: "$DATA_DIR"
 
   echo '初始化数据库中'
-  /usr/bin/mysqld --initialize --user=mysql --datadir="$DATA_DIR" --force --basedir=/usr --rpm
+
+  /usr/bin/mysql_install_db --user=mysql --datadir="$DATA_DIR" --rpm
+
   chown -R mysql: "$DATA_DIR"
   echo '数据库初始化完成'
 
