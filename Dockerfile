@@ -12,7 +12,7 @@ COPY docker-entrypoint.sh /usr/local/bin/
 RUN addgroup -S mysql \ 
     && adduser -D -S -h /var/cache/mysql -s /sbin/nologin -G mysql mysql &&  mkdir -p $DATA_DIR $LOGS_DIR \
     && mkdir -p /data/docker-entrypoint-initdb.d ${DATA_DIR} ${LOGS_DIR} ${ETC_DIR} \ 
-    && apk -U upgrade && apk add mariadb tzdata \ 
+    && apk -U upgrade && apk add mariadb mariadb-client tzdata \ 
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo "Asia/Shanghai" > /etc/timezone \
     && apk add --no-cache --virtual .build-deps  linux-headers bison libexecinfo-dev \ 
     && rm -rf /usr/share/apk/* && rm -rf /usr/share/terminfo/* && apk del .build-deps linux-headers bison libexecinfo-dev \ 
