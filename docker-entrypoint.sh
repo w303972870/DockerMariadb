@@ -24,14 +24,14 @@ if [ ! -d "$DATA_DIR/mysql" ]; then
 
   # Start mysqld to config it
   echo "执行/usr/bin/mysqld_safe --defaults-file=/data/etc/my.cnf --user=mysql --datadir=\"$DATA_DIR\" --skip-name-resolve --basedir=/usr/"
-  /usr/bin/mysqld_safe --defaults-file=/data/etc/my.cnf --user=mysql --datadir="$DATA_DIR" --skip-name-resolve --basedir=/usr/ &
+  /usr/bin/mysqld_safe --defaults-file=/data/etc/my.cnf --user=mysql --datadir="$DATA_DIR" --skip-name-resolve --basedir=/usr/ 
   echo '执行成功'
-
+  
   mysql_options='--protocol=socket -uroot'
 
   if [ -z "$MYSQL_INITDB_SKIP_TZINFO" ]; then
     # sed is for https://bugs.mysql.com/bug.php?id=20545
-    echo "开始设置时区表"
+    echo "开始设置时区表/usr/bin/mysql_tzinfo_to_sql /usr/share/zoneinfo | sed 's/Local time zone must be set--see zic manual page/FCTY/' | /usr/bin/mysql $mysql_options mysql"
     /usr/bin/mysql_tzinfo_to_sql /usr/share/zoneinfo | \
       sed 's/Local time zone must be set--see zic manual page/FCTY/' | \
       /usr/bin/mysql $mysql_options mysql

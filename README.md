@@ -13,6 +13,7 @@ docker run -dit -p 3306:3306 -v /data/mariadb/:/data/ docker.io/w303972870/maria
 ```
 
 **以下变量暂停使用**
+
 |变量|解释|
 |:---|:---|
 |MYSQL_ROOT_HOST|'root'@'${MYSQL_ROOT_HOST}' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}|
