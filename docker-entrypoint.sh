@@ -13,7 +13,7 @@ if [ ! -d "$DATA_DIR/mysql" ]; then
   chown mysql: "$DATA_DIR"
 
   echo "初始化数据库中($DATA_DIR)"
-  /usr/bin/mysql_install_db --user=mysql --datadir="$DATA_DIR" --skip-name-resolve --force --basedir=/usr/ --rpm > /data/logs/mysql_install_db.log
+  /usr/bin/mysql_install_db --user=mysql --datadir="$DATA_DIR" --skip-name-resolve --basedir=/usr/ --rpm > /data/logs/mysql_install_db.log
   chown -R mysql: "$DATA_DIR"
 
   echo
