@@ -26,7 +26,8 @@ if [ ! -d "$DATA_DIR/mysql" ]; then
   echo "执行/usr/bin/mysqld_safe --defaults-file=/data/etc/my.cnf --user=mysql --datadir=\"$DATA_DIR\" --skip-name-resolve --basedir=/usr/"
   /usr/bin/mysqld_safe --defaults-file=/data/etc/my.cnf --user=mysql --datadir="$DATA_DIR" --skip-name-resolve --basedir=/usr/ --skip-networking --nowatch
   echo '执行成功'
-  
+  sleep 3
+
   mysql_options='--protocol=socket -uroot'
 
   if [ -z "$MYSQL_INITDB_SKIP_TZINFO" ]; then
