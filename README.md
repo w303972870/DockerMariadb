@@ -1,6 +1,9 @@
+## 此版本可以使用参数来初始化数据库，并且已经安装了client相关命令
+
 ```
-docker pull w303972870/mariadb
+docker pull w303972870/mariadb:parm_mariadb
 ```
+
 |软件|版本|
 |:---|:---|
 |mariadb|10.2.15|
@@ -9,10 +12,8 @@ docker pull w303972870/mariadb
 #### 启动命令示例：为了初始化必须指定一个默认的root密码MYSQL_ROOT_PASSWORD
 
 ```
-docker run -dit -p 3306:3306 -v /data/mariadb/:/data/ docker.io/w303972870/mariadb
+docker run -dit -p 3306:3306 -v /data/mariadb/:/data/ -e MYSQL_ROOT_HOST=192.168.12.% -e MYSQL_ROOT_PASSWORD=123456 docker.io/w303972870/mariadb:parm_mariadb
 ```
-
-**以下变量暂停使用**
 
 |变量|解释|
 |:---|:---|
@@ -23,8 +24,6 @@ docker run -dit -p 3306:3306 -v /data/mariadb/:/data/ docker.io/w303972870/maria
 |MYSQL_DATABASE|默认创建一个数据库|
 |MYSQL_USER|新建一个用户|
 |MYSQL_PASSWORD|新建用户的密码|
-
-### 启动之后，需要mysql -S /data/mariadb/database/mysql.sock连接容器mysql后重新配置访问限制访问账户，
 
 ### 数据目录：/data/database/
 ### 日志目录：/data/logs/
