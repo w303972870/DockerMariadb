@@ -1,3 +1,6 @@
+## 该版本不可以通过变量参数初始化数据库的，也没有安装client命令组建(因为用不到)
+## 如果需要使用命令参数初始化数据库请切换到分支parm_mariadb
+
 ```
 docker pull w303972870/mariadb
 ```
@@ -12,7 +15,7 @@ docker pull w303972870/mariadb
 docker run -dit -p 3306:3306 -v /data/mariadb/:/data/ docker.io/w303972870/mariadb
 ```
 
-**以下变量暂停使用**
+**以下变量在该分支暂停使用**
 |变量|解释|
 |:---|:---|
 |MYSQL_ROOT_HOST|'root'@'${MYSQL_ROOT_HOST}' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}|
