@@ -36,6 +36,6 @@ if [ ! -d "$DATA_DIR/mysql" ]; then
   echo '数据库初始化完成，等待启动.'
   echo
 fi
-
+echo "启动成功"
 chown -R mysql: "$DATA_DIR"
 exec "$@"
