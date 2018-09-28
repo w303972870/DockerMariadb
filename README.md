@@ -23,7 +23,7 @@ docker run -dit -p 3306:3306 -v /data/mariadb/:/data/ docker.io/w303972870/maria
 |MYSQL_USER|新建一个用户|
 |MYSQL_PASSWORD|新建用户的密码|
 
-### 启动之后，需要mysql -h 127.0.0.1 -p3306 -u root连接容器mysql后重新配置访问限制，
+### 启动之后，需要mysql -S /data/mariadb/database/mysql.sock连接容器mysql后重新配置访问限制访问账户，
 
 ### 数据目录：/data/database/
 ### 日志目录：/data/logs/
@@ -61,12 +61,12 @@ docker run -dit -p 3306:3306 -v /data/mariadb/:/data/ docker.io/w303972870/maria
 
 ```
 [client]
-port=
+port= 3306
 socket = /data/database/mysql.sock
 default-character-set = utf8mb4
  
 [mysqld]
-port=
+port= 3306
 socket = /data/database/mysql.sock
 tmpdir = /tmp/
 basedir=/usr/
@@ -100,8 +100,6 @@ key_buffer_size = 256M
  
 thread_cache_size = 64
  
-query_cache_type=
-query_cache_size=
 query_cache_limit = 2M
  
 ft_min_word_len = 4
@@ -128,14 +126,11 @@ default_storage_engine = InnoDB
 #default-storage-engine = MyISAM
 innodb_file_per_table = 1
 innodb_open_files = 500
-innodb_buffer_pool_size=
 innodb_write_io_threads = 4
 innodb_read_io_threads = 4
 innodb_thread_concurrency = 0
 innodb_purge_threads = 1
-innodb_flush_log_at_trx_commit=
 innodb_log_buffer_size = 2M
-innodb_log_file_size=
 innodb_log_files_in_group = 3
 innodb_max_dirty_pages_pct = 90
 innodb_lock_wait_timeout = 120
@@ -150,7 +145,6 @@ wait_timeout = 28800
  
 [mysqldump]
 quick
-max_allowed_packet=
  
 [myisamchk]
 key_buffer_size = 256M
